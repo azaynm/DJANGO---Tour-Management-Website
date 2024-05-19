@@ -1,7 +1,15 @@
-{% block content%}
-{% for task in object_list %}
-<li>{{task.body}}</li>
-<li>{{task.due_date}}</li>
-<li>{{task.category}}</li>
-{% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Packages</title>
+</head>
+<body>
+    <h1>Packages</h1>
+    <ul>
+        {% for package in packages %}
+        <li>{{ package.name }} - {{ package.description }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_package' %}">Add Package</a>
+</body>
+</html>
