@@ -1,33 +1,39 @@
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import TaskItem
-from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Package
+from .forms import PackageForm
 
-def hello(request):
-    return HttpResponse("Hello, World!")
+def package_list(request):
+    packages = Package.objects.all()
+    return render(request, 'myapp/package_list.html', {'packages': packages})
 
-class ViewPackages(ListView):
-    model = TaskItem
-    template_name = 'myapp/view_packages.html'
-    context_object_name = 'packages'
+def package_detail(request, pk):
+    package = get_object_or_404(Package, pk=pk)
+    return render(request, 'myapp/package_detail.html', {'package': package})
 
+def package_create(request):
+    if request.method == 'POST':
+        form = PackageForm(request.POST)
+        if form.is_valid():
+            package = form.save()
+            return redirect('package_detail', pk=package.pk)
+    else:
+        form = PackageForm()
+    return render(request, 'myapp/package_form.html', {'form': form})
 
-class AddPackage(CreateView):
-    model = TaskItem
-    template_name = 'myapp/add_package.html'
-    fields = ['name', 'description']
-    success_url = reverse_lazy('view_packages')
+def package_update(request, pk):
+    package = get_object_or_404(Package, pk=pk)
+    if request.method == 'POST':
+        form = PackageForm(request.POST, instance=package)
+        if form.is_valid():
+            package = form.save()
+            return redirect('package_detail', pk=package.pk)
+    else:
+        form = PackageForm(instance=package)
+    return render(request, 'myapp/package_form.html', {'form': form})
 
-
-class UpdatePackage(UpdateView):
-    model = TaskItem
-    template_name = 'myapp/update_package.html'
-    fields = ['name', 'description']
-    success_url = reverse_lazy('view_packages')
-
-
-class DeletePackage(DeleteView):
-    model = TaskItem
-    template_name = 'myapp/delete_package.html'
-    success_url = reverse_lazy('view_packages')
+def package_delete(request, pk):
+    package = get_object_or_404(Package, pk=pk)
+    if request.method == 'POST':
+        package.delete()
+        return redirect('package_list')
+    return render(request, 'myapp/package_confirm_delete.html', {'package': package})

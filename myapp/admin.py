@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TaskItem
+from .models import TravelPackage
 
-admin.site.register(TaskItem)
+admin.site.register(TravelPackage)
 

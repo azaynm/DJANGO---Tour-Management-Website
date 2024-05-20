@@ -1,0 +1,26 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}
+    Package List
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-warning">Package List</h1>
+    <ul class="list-group">
+        {% for package in packages %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'package_detail' package.pk %}">{{ package.name }}</a>
+            <div>
+                <a href="{% url 'package_update' package.pk %}" class="btn btn-secondary btn-sm me-1">Edit</a>
+                <form action="{% url 'package_delete' package.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'package_create' %}" class="btn btn-primary mt-3">Add Package</a>
+</div>
+{% endblock %}

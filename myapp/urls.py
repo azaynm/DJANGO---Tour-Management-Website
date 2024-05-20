@@ -1,11 +1,10 @@
 from django.urls import path
 from . import views
-from myapp.views import ViewPackages, AddPackage, UpdatePackage, DeletePackage
 
 urlpatterns = [
-    path('hello/', views.hello, name='hello'),
-    path('packages/', ViewPackages.as_view(), name='view_packages'),
-    path('packages/add/', AddPackage.as_view(), name='add_package'),
-    path('packages/update/<int:pk>/', UpdatePackage.as_view(), name='update_package'),
-    path('packages/delete/<int:pk>/', DeletePackage.as_view(), name='delete_package'),
+    path('', views.package_list, name='package_list'),
+    path('package/<int:pk>/', views.package_detail, name='package_detail'),
+    path('package/new/', views.package_create, name='package_create'),
+    path('package/<int:pk>/edit/', views.package_update, name='package_update'),
+    path('package/<int:pk>/delete/', views.package_delete, name='package_delete'),
 ]
